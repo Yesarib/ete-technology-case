@@ -1,6 +1,5 @@
 import { RequestHandler } from "express";
 import ProductModel, { Product } from "../models/product.model";
-import { ObjectId } from "mongoose";
 import createError from 'http-errors'
 
 export const newProduct: RequestHandler = async (req, res, next) => {
@@ -18,7 +17,7 @@ export const newProduct: RequestHandler = async (req, res, next) => {
 
 export const products: RequestHandler = async (req, res, next) => {
     try {
-        const products = await ProductModel.find();
+        const products = await ProductModel.find().populate('company');
 
         res.status(200).json(products)
     } catch (error) {
@@ -29,7 +28,7 @@ export const products: RequestHandler = async (req, res, next) => {
 export const getProductById: RequestHandler = async (req, res, next) => {
     try {
         const { productId } = req.params
-        const product = await ProductModel.findById(productId)
+        const product = await ProductModel.findById(productId).populate('company');
 
         if (!product) {
             throw createError.NotFound('product not found!')
@@ -41,10 +40,11 @@ export const getProductById: RequestHandler = async (req, res, next) => {
     }
 }
 
-export const updateProduct: RequestHandler= async (req, res, next) => {
+export const updateProduct: RequestHandler = async (req, res, next) => {
     try {
         const { productId } = req.params
-        const productData = req.body;
+        const productData: Product = req.body;
+        console.log(productData);
 
         const product = await ProductModel.findByIdAndUpdate(productId, productData, { new: true });
         if (!product) {

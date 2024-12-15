@@ -23,6 +23,7 @@ const Register = () => {
 
     localStorage.setItem('token', response.token);
     navigate('/companies')
+    window.location.reload()
   };
 
   const onFinishFailed: FormProps<FieldType>['onFinishFailed'] = (errorInfo) => {

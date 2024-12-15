@@ -1,7 +1,7 @@
 import { DatabaseOutlined, PlusOutlined } from '@ant-design/icons';
 import { Button, Modal, Space, Table, TableProps, Typography } from 'antd';
 import { useEffect, useState } from 'react'
-import { useNavigate } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { Company as ICompany } from '../types/company';
 import { companyService } from '../api/company';
 import { ErrorResponse } from '../types/error';
@@ -65,6 +65,8 @@ const Company = () => {
       dataIndex: 'name',
       key: 'name',
       render: (text) => <a>{text}</a>,
+      sorter: (a, b) => a.name.localeCompare(b.name),
+      sortDirections: ['ascend', 'descend'],
     },
     {
       title: 'Legal Number',
@@ -80,11 +82,29 @@ const Company = () => {
       title: 'Website',
       dataIndex: 'website',
       key: 'website',
+      render: (_, record) => (
+        <Link to={record.website} target='_blank'>
+          {record.website}
+        </Link>
+      ),
     },
     {
       title: 'Created At',
       dataIndex: 'createdAt',
       key: 'createdAt',
+      render: (_, record) => {
+        const date = record?.createdAt ? new Date(record.createdAt).toLocaleDateString() : 'N/A';
+        return (
+          <Typography> {date} </Typography>
+        );
+      },
+      sorter: (a, b) => {
+        if (a.createdAt && b.createdAt) {
+          return new Date(a.createdAt).getTime() - new Date(b.createdAt).getTime();
+        } else {
+          return 0
+        }
+      }
     },
     {
       title: 'Action',
@@ -106,11 +126,11 @@ const Company = () => {
         <div className='w-full flex justify-between items-center p-4 bg-gray-200/30 rounded-xl'>
           <div className='flex gap-2'>
             <div className='w-16 h-16 flex justify-center items-center rounded-md bg-gradient-to-bl from-blue-600 to-blue-300'>
-              <DatabaseOutlined className='text-4 xl text-white' />
+              <DatabaseOutlined className='text-4xl text-white' />
             </div>
             <Typography className='flex flex-col'>
-              <Typography.Title level={4} > Şirketler </Typography.Title>
-              <Typography.Paragraph> Şirketlerinizi bu ekrandan düzenleyebilirsiniz. </Typography.Paragraph>
+              <Typography.Title level={4} > Companies </Typography.Title>
+              <Typography.Paragraph> You can organize your companies from this screen. </Typography.Paragraph>
             </Typography>
           </div>
           <div>

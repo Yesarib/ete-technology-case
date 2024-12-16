@@ -37,14 +37,14 @@ const Home = () => {
       <div className='lg:w-1/2 flex flex-col justify-center items-center p-4'>
         <div className='w-full flex justify-center items-center gap-4'>
           {error && <p>{error}</p>}
-          <Card className='lg:w-96 ' title="Sistemde bulunan toplam şirket sayısı" bordered={true}>
+          <Card className='lg:w-96 ' title="Total number of companies in the system" bordered={true}>
             <Typography className='flex justify-end'>
               <Typography.Title level={2}>
                 {companies?.length}
               </Typography.Title>
             </Typography>
           </Card>
-          <Card className='w-96' title="Son Eklenen 3 şirket" bordered={true}>
+          <Card className='w-96' title="Last Added 3 companies" bordered={true}>
             <Typography className='flex'>
               <Typography.Title level={5}>
                 {lastThreeCompany?.map((company) => (
